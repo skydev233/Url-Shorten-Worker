@@ -202,7 +202,6 @@
       <div class="m3-lang" role="group" data-i18n-aria="lang.label">
         <button class="m3-chip" type="button" data-lang="en" onclick="setLocale('en')">EN</button>
         <button class="m3-chip" type="button" data-lang="zh-CN" onclick="setLocale('zh-CN')">简体</button>
-        <button class="m3-chip" type="button" data-lang="zh-TW" onclick="setLocale('zh-TW')">繁體</button>
       </div>
       <div class="m3-card__body">
         <div class="m3-warning-icon" aria-hidden="true">
@@ -246,15 +245,6 @@
           'banner': '为保护你的安全，我们不会自动跳转到该网址。建议你关闭此页面并停止访问。如果仍需访问，请手动将上方链接复制到浏览器地址栏打开。谢谢。',
           'footer.source': '由 Url Shorten Worker 提供',
           'lang.label': '语言'
-        },
-        'zh-TW': {
-          'meta.title': '警告！你造訪的網址存在風險 · 短連結',
-          'title': '警告！',
-          'subtitle': '你即將造訪的網址被標記為不安全。',
-          'field.label': '危險網址',
-          'banner': '為保護你的安全，我們不會自動跳轉到該網址。建議你關閉此頁面並停止造訪。如果仍需造訪，請手動將上方連結複製到瀏覽器網址列開啟。謝謝。',
-          'footer.source': '由 Url Shorten Worker 提供',
-          'lang.label': '語言'
         }
       };
 
@@ -262,11 +252,6 @@
         var saved = null;
         try { saved = localStorage.getItem('locale'); } catch (e) {}
         if (saved && I18N[saved]) return saved;
-        var nav = (navigator.language || 'en').toLowerCase();
-        if (nav.indexOf('zh') === 0) {
-          if (nav.indexOf('tw') !== -1 || nav.indexOf('hk') !== -1 || nav.indexOf('hant') !== -1) return 'zh-TW';
-          return 'zh-CN';
-        }
         return 'zh-CN';
       })();
 

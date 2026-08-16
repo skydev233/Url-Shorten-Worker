@@ -374,7 +374,6 @@
       <div class="m3-lang" role="group" data-i18n-aria="lang.label">
         <button class="m3-chip" type="button" data-lang="en" onclick="setLocale('en')">EN</button>
         <button class="m3-chip" type="button" data-lang="zh-CN" onclick="setLocale('zh-CN')">简体</button>
-        <button class="m3-chip" type="button" data-lang="zh-TW" onclick="setLocale('zh-TW')">繁體</button>
       </div>
       <div class="m3-card__body">
         <h1 class="m3-headline" data-i18n="form.title">Shorten your URL</h1>
@@ -459,26 +458,6 @@
           'error.network': '网络错误，请重试。',
           'footer.source': '在 GitHub 查看源码',
           'lang.label': '语言'
-        },
-        'zh-TW': {
-          'meta.title': '短連結',
-          'form.title': '縮短你的連結',
-          'form.example': '範例：https://example.com/long-url/RoowykPo8KPvjZWxQ',
-          'demo.banner': '提示：本服務僅供演示，產生的短連結將在 24 小時後自動過期。',
-          'field.label': '長連結',
-          'button.shorten': '立即縮短',
-          'button.working': '處理中…',
-          'dialog.title': '你的短連結',
-          'dialog.close': '關閉',
-          'dialog.copy': '複製',
-          'copy.copied': '已複製 ✓',
-          'copy.failed': '複製失敗',
-          'error.empty': '請輸入網址',
-          'error.invalid': '請輸入有效的網址（需包含 http:// 或 https://）',
-          'error.failed': '無法縮短該網址，請重試。',
-          'error.network': '網路錯誤，請重試。',
-          'footer.source': '在 GitHub 查看原始碼',
-          'lang.label': '語言'
         }
       };
 
@@ -486,11 +465,6 @@
         var saved = null;
         try { saved = localStorage.getItem('locale'); } catch (e) {}
         if (saved && I18N[saved]) return saved;
-        var nav = (navigator.language || 'en').toLowerCase();
-        if (nav.indexOf('zh') === 0) {
-          if (nav.indexOf('tw') !== -1 || nav.indexOf('hk') !== -1 || nav.indexOf('hant') !== -1) return 'zh-TW';
-          return 'zh-CN';
-        }
         return 'zh-CN';
       })();
 
@@ -556,7 +530,7 @@
         body: JSON.stringify({ url: url })
       }).then(function (r) { return r.json(); }).then(function (res) {
         if (res && res.key) {
-          generatedUrl = window.location.origin + (res.key.charAt(0) === '/' ? res.key : '/' + res.key);
+          generatedUrl = res.short_url || (window.location.origin + (res.key.charAt(0) === '/' ? res.key : '/' + res.key));
           document.getElementById('result').textContent = generatedUrl;
           openModal('exampleModal');
         } else {

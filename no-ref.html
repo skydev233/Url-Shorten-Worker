@@ -138,22 +138,10 @@
           'meta.title': '正在跳转…',
           'title': '正在跳转…',
           'subtitle': '正在前往目标网址。'
-        },
-        'zh-TW': {
-          'meta.title': '正在跳轉…',
-          'title': '正在跳轉…',
-          'subtitle': '正在前往目標網址。'
         }
       };
 
-      var currentLocale = (function () {
-        var nav = (navigator.language || 'en').toLowerCase();
-        if (nav.indexOf('zh') === 0) {
-          if (nav.indexOf('tw') !== -1 || nav.indexOf('hk') !== -1 || nav.indexOf('hant') !== -1) return 'zh-TW';
-          return 'zh-CN';
-        }
-        return 'zh-CN';
-      })();
+      var currentLocale = 'zh-CN';
 
       function t(key) {
         var dict = I18N[currentLocale] || I18N.en || {};
