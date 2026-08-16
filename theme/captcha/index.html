@@ -126,6 +126,7 @@
     }
 
     .m3-card {
+      position: relative;
       width: 100%;
       max-width: 560px;
       background: var(--md-surface-container-low);
@@ -143,6 +144,30 @@
 
     .m3-headline { font: var(--md-headline-small); color: var(--md-on-surface); margin-bottom: 8px; }
     .m3-subtitle { font: var(--md-body-medium); color: var(--md-on-surface-variant); }
+
+    .m3-lang {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      display: inline-flex;
+      gap: 4px;
+      z-index: 2;
+    }
+    .m3-chip {
+      position: relative;
+      height: 32px;
+      padding: 0 12px;
+      border: 1px solid var(--md-outline);
+      background: transparent;
+      color: var(--md-primary);
+      border-radius: var(--md-shape-sm);
+      font: var(--md-label-medium);
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .m3-chip::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.15s ease; }
+    .m3-chip:hover::after { opacity: 0.08; }
+    .m3-chip.active { background: var(--md-secondary-container); color: var(--md-on-secondary-container); border-color: transparent; }
 
     .m3-text-field { position: relative; display: block; margin-bottom: 16px; }
     .m3-text-field__input {
@@ -261,11 +286,18 @@
     .m3-link:hover::after { opacity: 0.08; }
     .m3-link:active::after { opacity: 0.12; }
 
+    .m3-copyright {
+      margin-top: 10px;
+      font: var(--md-body-medium);
+      color: var(--md-on-surface-variant);
+    }
+
     .m3-notice {
       padding: 12px 16px;
       border-radius: var(--md-shape-md);
       font: var(--md-body-medium);
       margin-top: 16px;
+      line-height: 1.5;
     }
     .m3-notice--success { background: var(--md-primary-container); color: var(--md-on-primary-container); }
     .m3-notice--error { background: var(--md-error-container); color: var(--md-on-error-container); }
@@ -327,7 +359,6 @@
       text-align: center;
     }
     .m3-dialog__actions { display: flex; flex-direction: column; gap: 8px; }
-    .m3-dialog__actions--row { flex-direction: row; justify-content: flex-end; }
 
     .m3-ripple {
       position: absolute;
@@ -358,9 +389,15 @@
 <body>
   <main class="page">
     <section class="m3-card">
+      <div class="m3-lang" role="group" data-i18n-aria="lang.label">
+        <button class="m3-chip" type="button" data-lang="en" onclick="setLocale('en')">EN</button>
+        <button class="m3-chip" type="button" data-lang="zh-CN" onclick="setLocale('zh-CN')">简体</button>
+        <button class="m3-chip" type="button" data-lang="zh-TW" onclick="setLocale('zh-TW')">繁體</button>
+      </div>
+
       <div class="m3-card__header">
-        <h1 class="m3-headline">Shorten your URLs</h1>
-        <p class="m3-subtitle">Fast, Secure, and Reliable URL Shortening Service</p>
+        <h1 class="m3-headline" data-i18n="form.title">Shorten your URLs</h1>
+        <p class="m3-subtitle" data-i18n="form.subtitle">Fast, Secure, and Reliable URL Shortening Service</p>
       </div>
 
       <div class="m3-card__body">
@@ -374,20 +411,21 @@
               autocomplete="off"
               spellcheck="false"
               aria-describedby="notice">
-            <span class="m3-text-field__label">Enter URL to shorten</span>
+            <span class="m3-text-field__label" data-i18n="field.label">Enter URL to shorten</span>
           </label>
           <button class="m3-btn m3-btn--block" type="submit" id="submitBtn">
-            <span class="m3-btn__label">Shorten</span>
+            <span class="m3-btn__label" data-i18n="button.shorten">Shorten</span>
           </button>
           <div id="notice" role="alert" aria-live="polite"></div>
         </form>
       </div>
 
       <div class="m3-card__footer">
-        <a class="m3-link" href="https://github.com/xyTom/Url-Shorten-Worker/" target="_blank" rel="noopener">
-          <span>View Source Code</span>
+        <a class="m3-link" href="https://github.com/skydev233/Url-Shorten-Worker" target="_blank" rel="noopener">
+          <span data-i18n="footer.source">View Source Code</span>
           <span>&rarr;</span>
         </a>
+        <div class="m3-copyright">© 2020–<span data-year>2026</span> xyTom &amp; skydev233</div>
       </div>
     </section>
   </main>
@@ -396,11 +434,11 @@
   <div id="captchaModal" class="m3-scrim" role="dialog" aria-modal="true" aria-labelledby="captchaTitle">
     <div class="m3-dialog">
       <div class="m3-dialog__header">
-        <h2 class="m3-dialog__title" id="captchaTitle">CAPTCHA Verification</h2>
-        <button class="m3-icon-btn" type="button" onclick="closeModal('captchaModal')" aria-label="Close">&times;</button>
+        <h2 class="m3-dialog__title" id="captchaTitle" data-i18n="captcha.title">CAPTCHA Verification</h2>
+        <button class="m3-icon-btn" type="button" onclick="closeModal('captchaModal')" data-i18n-aria="dialog.close" aria-label="Close">&times;</button>
       </div>
       <div class="m3-dialog__content">
-        <p style="text-align: center; margin-bottom: 16px; color: var(--md-on-surface-variant); font: var(--md-body-medium);">
+        <p style="text-align: center; margin-bottom: 16px; color: var(--md-on-surface-variant); font: var(--md-body-medium);" data-i18n="captcha.prompt">
           Please complete the CAPTCHA to continue
         </p>
         <div style="display: flex; justify-content: center;">
@@ -414,21 +452,144 @@
   <div id="resultModal" class="m3-scrim" role="dialog" aria-modal="true" aria-labelledby="resultTitle">
     <div class="m3-dialog">
       <div class="m3-dialog__header">
-        <h2 class="m3-dialog__title" id="resultTitle">Short URL Generated</h2>
-        <button class="m3-icon-btn" type="button" onclick="closeModal('resultModal')" aria-label="Close">&times;</button>
+        <h2 class="m3-dialog__title" id="resultTitle" data-i18n="result.title">Short URL Generated</h2>
+        <button class="m3-icon-btn" type="button" onclick="closeModal('resultModal')" data-i18n-aria="dialog.close" aria-label="Close">&times;</button>
       </div>
       <div class="m3-dialog__content">
         <div class="m3-dialog__result" id="resultUrl"></div>
       </div>
       <div class="m3-dialog__actions">
-        <button class="m3-btn m3-btn--block" type="button" onclick="copyToClipboard()">Copy Link</button>
-        <button class="m3-btn m3-btn--tonal m3-btn--block" type="button" onclick="closeModal('resultModal')">Close</button>
+        <button class="m3-btn m3-btn--block" type="button" onclick="copyToClipboard()" data-i18n="copy.link">Copy Link</button>
+        <button class="m3-btn m3-btn--tonal m3-btn--block" type="button" onclick="closeModal('resultModal')" data-i18n="dialog.close">Close</button>
       </div>
     </div>
   </div>
 
   <script>
-    // State Management
+    // ---- i18n ----
+    (function () {
+      var I18N = {
+        'en': {
+          'meta.title': 'URL Shortener · Fast & Secure',
+          'form.title': 'Shorten your URLs',
+          'form.subtitle': 'Fast, Secure, and Reliable URL Shortening Service',
+          'field.label': 'Enter URL to shorten',
+          'button.shorten': 'Shorten',
+          'button.working': 'Generating…',
+          'captcha.title': 'CAPTCHA Verification',
+          'captcha.prompt': 'Please complete the CAPTCHA to continue',
+          'result.title': 'Short URL Generated',
+          'copy.link': 'Copy Link',
+          'dialog.close': 'Close',
+          'copy.copied': '✓ Copied',
+          'copy.failed': 'Failed to copy',
+          'error.empty': 'Please enter a URL',
+          'error.invalid': 'Please enter a valid URL (must include http:// or https://)',
+          'error.captcha': 'CAPTCHA verification failed. Please try again.',
+          'error.unknown': 'Unknown error occurred',
+          'error.network': 'Network error',
+          'success.created': 'Short URL created successfully!',
+          'footer.source': 'View Source Code',
+          'lang.label': 'Language'
+        },
+        'zh-CN': {
+          'meta.title': '短链接 · 快速安全',
+          'form.title': '缩短你的链接',
+          'form.subtitle': '快速、安全、可靠的短链接服务',
+          'field.label': '输入要缩短的网址',
+          'button.shorten': '缩短',
+          'button.working': '生成中…',
+          'captcha.title': '人机验证',
+          'captcha.prompt': '请完成验证码以继续',
+          'result.title': '短链接已生成',
+          'copy.link': '复制链接',
+          'dialog.close': '关闭',
+          'copy.copied': '✓ 已复制',
+          'copy.failed': '复制失败',
+          'error.empty': '请输入网址',
+          'error.invalid': '请输入有效的网址（需包含 http:// 或 https://）',
+          'error.captcha': '验证码验证失败，请重试。',
+          'error.unknown': '发生未知错误',
+          'error.network': '网络错误',
+          'success.created': '短链接创建成功！',
+          'footer.source': '查看源码',
+          'lang.label': '语言'
+        },
+        'zh-TW': {
+          'meta.title': '短連結 · 快速安全',
+          'form.title': '縮短你的連結',
+          'form.subtitle': '快速、安全、可靠的短連結服務',
+          'field.label': '輸入要縮短的網址',
+          'button.shorten': '縮短',
+          'button.working': '產生中…',
+          'captcha.title': '人機驗證',
+          'captcha.prompt': '請完成驗證碼以繼續',
+          'result.title': '短連結已產生',
+          'copy.link': '複製連結',
+          'dialog.close': '關閉',
+          'copy.copied': '✓ 已複製',
+          'copy.failed': '複製失敗',
+          'error.empty': '請輸入網址',
+          'error.invalid': '請輸入有效的網址（需包含 http:// 或 https://）',
+          'error.captcha': '驗證碼驗證失敗，請重試。',
+          'error.unknown': '發生未知錯誤',
+          'error.network': '網路錯誤',
+          'success.created': '短連結建立成功！',
+          'footer.source': '查看原始碼',
+          'lang.label': '語言'
+        }
+      };
+
+      var currentLocale = (function () {
+        var saved = null;
+        try { saved = localStorage.getItem('locale'); } catch (e) {}
+        if (saved && I18N[saved]) return saved;
+        var nav = (navigator.language || 'en').toLowerCase();
+        if (nav.indexOf('zh') === 0) {
+          if (nav.indexOf('tw') !== -1 || nav.indexOf('hk') !== -1 || nav.indexOf('hant') !== -1) return 'zh-TW';
+          return 'zh-CN';
+        }
+        return 'zh-CN';
+      })();
+
+      function t(key) {
+        var dict = I18N[currentLocale] || I18N.en || {};
+        return dict[key] != null ? dict[key] : (I18N.en && I18N.en[key] != null ? I18N.en[key] : key);
+      }
+
+      function apply() {
+        document.documentElement.lang = currentLocale;
+        document.title = t('meta.title');
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          el.textContent = t(el.getAttribute('data-i18n'));
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+          el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+        });
+        document.querySelectorAll('.m3-chip').forEach(function (chip) {
+          chip.classList.toggle('active', chip.getAttribute('data-lang') === currentLocale);
+        });
+      }
+
+      window.setLocale = function (locale) {
+        if (!I18N[locale]) return;
+        currentLocale = locale;
+        try { localStorage.setItem('locale', locale); } catch (e) {}
+        apply();
+        if (window.onLocaleChange) window.onLocaleChange();
+      };
+
+      window.t = t;
+
+      document.addEventListener('DOMContentLoaded', function () {
+        apply();
+        document.querySelectorAll('[data-year]').forEach(function (el) {
+          el.textContent = new Date().getFullYear();
+        });
+      });
+    })();
+
+    // ---- App logic ----
     const state = {
       captchaToken: null,
       isProcessing: false,
@@ -436,7 +597,6 @@
       generatedUrl: null
     };
 
-    // Elements
     const elements = {
       form: document.getElementById('shortenForm'),
       input: document.getElementById('urlInput'),
@@ -448,7 +608,6 @@
       capWidget: document.getElementById('capWidget')
     };
 
-    // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       if (elements.capWidget) {
         elements.capWidget.addEventListener('solve', (e) => {
@@ -460,15 +619,13 @@
           }
         });
 
-        elements.capWidget.addEventListener('error', (e) => {
-          showNotice('CAPTCHA verification failed. Please try again.', 'error');
+        elements.capWidget.addEventListener('error', () => {
+          showNotice(t('error.captcha'), 'error');
         });
 
         elements.capWidget.addEventListener('reset', () => {
           state.captchaToken = null;
         });
-
-        elements.capWidget.addEventListener('progress', (e) => { /* debug */ });
       }
 
       elements.input.addEventListener('input', () => {
@@ -500,13 +657,13 @@
       const url = elements.input.value.trim();
 
       if (!url) {
-        showNotice('Please enter a URL', 'error');
+        showNotice(t('error.empty'), 'error');
         elements.input.focus();
         return;
       }
 
       if (!isValidUrl(url)) {
-        showNotice('Please enter a valid URL (must include http:// or https://)', 'error');
+        showNotice(t('error.invalid'), 'error');
         elements.input.classList.add('m3-invalid');
         elements.input.focus();
         return;
@@ -546,13 +703,13 @@
 
           resetCaptcha();
 
-          showNotice('Short URL created successfully!', 'success');
+          showNotice(t('success.created'), 'success');
           setTimeout(() => {
             openModal('resultModal');
             clearNotice();
           }, 500);
         } else {
-          const errorMsg = data.error || 'Unknown error occurred';
+          const errorMsg = data.error || t('error.unknown');
           showNotice(errorMsg, 'error');
 
           if (data.captcha_required || errorMsg.toLowerCase().includes('captcha')) {
@@ -560,7 +717,7 @@
           }
         }
       } catch (error) {
-        showNotice(`Network error: ${error.message}`, 'error');
+        showNotice(t('error.network') + ': ' + error.message, 'error');
         resetCaptcha();
       } finally {
         state.isProcessing = false;
@@ -579,7 +736,7 @@
       if (!state.generatedUrl) return;
 
       const copyBtn = document.querySelector('#resultModal .m3-btn:first-child');
-      const originalText = copyBtn.textContent;
+      const originalText = t('copy.link');
 
       try {
         if (navigator.clipboard && window.isSecureContext) {
@@ -595,14 +752,14 @@
           document.body.removeChild(textarea);
         }
 
-        copyBtn.textContent = '✓ Copied';
+        copyBtn.textContent = t('copy.copied');
         copyBtn.classList.add('m3-btn--tonal');
         setTimeout(() => {
           copyBtn.textContent = originalText;
           copyBtn.classList.remove('m3-btn--tonal');
         }, 2000);
       } catch (error) {
-        showNotice('Failed to copy', 'error');
+        showNotice(t('copy.failed'), 'error');
       }
     }
 
@@ -628,9 +785,11 @@
     }
 
     function showNotice(message, type = 'error') {
-      const cls = type === 'success' ? 'm3-notice m3-notice--success' : 'm3-notice m3-notice--error';
-      const animation = type === 'error' ? ' animate-shake' : '';
-      elements.notice.innerHTML = `<div class="${cls}${animation}">${message}</div>`;
+      const el = document.createElement('div');
+      el.className = 'm3-notice ' + (type === 'success' ? 'm3-notice--success' : 'm3-notice--error') + (type === 'error' ? ' animate-shake' : '');
+      el.textContent = message;
+      elements.notice.innerHTML = '';
+      elements.notice.appendChild(el);
     }
 
     function clearNotice() {
@@ -641,13 +800,12 @@
       elements.submitBtn.disabled = loading;
       const label = elements.submitBtn.querySelector('.m3-btn__label');
       if (loading) {
-        label.innerHTML = '<span class="m3-spinner"></span>Generating&hellip;';
+        label.innerHTML = '<span class="m3-spinner"></span>' + t('button.working');
       } else {
-        label.textContent = 'Shorten';
+        label.textContent = t('button.shorten');
       }
     }
 
-    // Scrim click to close + ripple
     ['captchaModal', 'resultModal'].forEach((id) => {
       const modal = document.getElementById(id);
       modal.addEventListener('click', (e) => {

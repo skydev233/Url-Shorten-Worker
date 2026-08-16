@@ -28,6 +28,7 @@
       --md-surface-container-highest: #e6e0e9;
       --md-elev-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
       --md-shape-xs: 4px;
+      --md-shape-sm: 8px;
       --md-shape-md: 12px;
       --md-shape-xl: 28px;
       --md-shape-full: 999px;
@@ -37,6 +38,7 @@
       --md-body-large: 400 16px/24px var(--md-font);
       --md-body-medium: 400 14px/20px var(--md-font);
       --md-label-large: 500 14px/20px var(--md-font);
+      --md-label-medium: 500 12px/16px var(--md-font);
     }
     @media (prefers-color-scheme: dark) {
       :root {
@@ -78,6 +80,7 @@
     }
 
     .m3-card {
+      position: relative;
       width: 100%;
       max-width: 560px;
       background: var(--md-surface-container-low);
@@ -92,20 +95,44 @@
       text-align: center;
     }
 
+    .m3-lang {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      display: inline-flex;
+      gap: 4px;
+      z-index: 2;
+    }
+    .m3-chip {
+      position: relative;
+      height: 32px;
+      padding: 0 12px;
+      border: 1px solid var(--md-outline);
+      background: transparent;
+      color: var(--md-primary);
+      border-radius: var(--md-shape-sm);
+      font: var(--md-label-medium);
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .m3-chip::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.15s ease; }
+    .m3-chip:hover::after { opacity: 0.08; }
+    .m3-chip.active { background: var(--md-error-container); color: var(--md-on-error-container); border-color: transparent; }
+
     .m3-warning-icon {
       width: 56px;
       height: 56px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: var(--md-shape-lg);
+      border-radius: var(--md-shape-md);
       background: var(--md-error-container);
       color: var(--md-on-error-container);
       margin-bottom: 20px;
     }
     .m3-warning-icon svg { width: 28px; height: 28px; fill: currentColor; }
 
-    .m3-title { font: var(--md-headline-small); color: var(--md-on-surface); margin-bottom: 8px; }
+    .m3-title { font: var(--md-headline-small); color: var(--md-on-surface); margin-bottom: 8px; padding-right: 128px; }
     .m3-subtitle {
       font: var(--md-body-medium);
       color: var(--md-on-surface-variant);
@@ -161,30 +188,122 @@
     .m3-link::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.15s ease; }
     .m3-link:hover::after { opacity: 0.08; }
     .m3-link:active::after { opacity: 0.12; }
+
+    .m3-copyright {
+      margin-top: 10px;
+      font: var(--md-body-medium);
+      color: var(--md-on-surface-variant);
+    }
   </style>
 </head>
 <body>
   <main class="page">
     <section class="m3-card">
+      <div class="m3-lang" role="group" data-i18n-aria="lang.label">
+        <button class="m3-chip" type="button" data-lang="en" onclick="setLocale('en')">EN</button>
+        <button class="m3-chip" type="button" data-lang="zh-CN" onclick="setLocale('zh-CN')">简体</button>
+        <button class="m3-chip" type="button" data-lang="zh-TW" onclick="setLocale('zh-TW')">繁體</button>
+      </div>
       <div class="m3-card__body">
         <div class="m3-warning-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
         </div>
-        <h1 class="m3-title">Warning!</h1>
-        <p class="m3-subtitle">The URL you are about to visit has been flagged as unsafe.</p>
+        <h1 class="m3-title" data-i18n="title">Warning!</h1>
+        <p class="m3-subtitle" data-i18n="subtitle">The URL you are about to visit has been flagged as unsafe.</p>
 
-        <span class="m3-field-label">Risky URL</span>
+        <span class="m3-field-label" data-i18n="field.label">Risky URL</span>
         <div class="m3-field" id="riskyUrl">{Replace}</div>
 
         <div class="m3-warning-banner">
           <span class="m3-warning-banner__icon">⚠</span>
-          <span>For your protection, we will not automatically redirect to this URL. We recommend that you close this page. If you still need to visit it, manually copy the link above into your browser's address bar. Thank you.</span>
+          <span data-i18n="banner">For your protection, we will not automatically redirect to this URL. We recommend that you close this page. If you still need to visit it, manually copy the link above into your browser's address bar. Thank you.</span>
         </div>
       </div>
       <div class="m3-card__footer">
-        <a class="m3-link" href="https://github.com/xyTom/Url-Shorten-Worker/" target="_blank" rel="noopener">Powered by Url Shorten Worker</a>
+        <a class="m3-link" href="https://github.com/skydev233/Url-Shorten-Worker" target="_blank" rel="noopener" data-i18n="footer.source">Powered by Url Shorten Worker</a>
+        <div class="m3-copyright">© 2020–<span data-year>2026</span> xyTom &amp; skydev233</div>
       </div>
     </section>
   </main>
+
+  <script>
+    (function () {
+      var I18N = {
+        'en': {
+          'meta.title': 'Warning! The URL you are visiting is risky · Shorter URL',
+          'title': 'Warning!',
+          'subtitle': 'The URL you are about to visit has been flagged as unsafe.',
+          'field.label': 'Risky URL',
+          'banner': 'For your protection, we will not automatically redirect to this URL. We recommend that you close this page. If you still need to visit it, manually copy the link above into your browser\'s address bar. Thank you.',
+          'footer.source': 'Powered by Url Shorten Worker',
+          'lang.label': 'Language'
+        },
+        'zh-CN': {
+          'meta.title': '警告！你访问的网址存在风险 · 短链接',
+          'title': '警告！',
+          'subtitle': '你即将访问的网址被标记为不安全。',
+          'field.label': '危险网址',
+          'banner': '为保护你的安全，我们不会自动跳转到该网址。建议你关闭此页面并停止访问。如果仍需访问，请手动将上方链接复制到浏览器地址栏打开。谢谢。',
+          'footer.source': '由 Url Shorten Worker 提供',
+          'lang.label': '语言'
+        },
+        'zh-TW': {
+          'meta.title': '警告！你造訪的網址存在風險 · 短連結',
+          'title': '警告！',
+          'subtitle': '你即將造訪的網址被標記為不安全。',
+          'field.label': '危險網址',
+          'banner': '為保護你的安全，我們不會自動跳轉到該網址。建議你關閉此頁面並停止造訪。如果仍需造訪，請手動將上方連結複製到瀏覽器網址列開啟。謝謝。',
+          'footer.source': '由 Url Shorten Worker 提供',
+          'lang.label': '語言'
+        }
+      };
+
+      var currentLocale = (function () {
+        var saved = null;
+        try { saved = localStorage.getItem('locale'); } catch (e) {}
+        if (saved && I18N[saved]) return saved;
+        var nav = (navigator.language || 'en').toLowerCase();
+        if (nav.indexOf('zh') === 0) {
+          if (nav.indexOf('tw') !== -1 || nav.indexOf('hk') !== -1 || nav.indexOf('hant') !== -1) return 'zh-TW';
+          return 'zh-CN';
+        }
+        return 'zh-CN';
+      })();
+
+      function t(key) {
+        var dict = I18N[currentLocale] || I18N.en || {};
+        return dict[key] != null ? dict[key] : (I18N.en && I18N.en[key] != null ? I18N.en[key] : key);
+      }
+
+      function apply() {
+        document.documentElement.lang = currentLocale;
+        document.title = t('meta.title');
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          el.textContent = t(el.getAttribute('data-i18n'));
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+          el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+        });
+        document.querySelectorAll('.m3-chip').forEach(function (chip) {
+          chip.classList.toggle('active', chip.getAttribute('data-lang') === currentLocale);
+        });
+      }
+
+      window.setLocale = function (locale) {
+        if (!I18N[locale]) return;
+        currentLocale = locale;
+        try { localStorage.setItem('locale', locale); } catch (e) {}
+        apply();
+        if (window.onLocaleChange) window.onLocaleChange();
+      };
+
+      document.addEventListener('DOMContentLoaded', function () {
+        apply();
+        document.querySelectorAll('[data-year]').forEach(function (el) {
+          el.textContent = new Date().getFullYear();
+        });
+      });
+    })();
+  </script>
 </body>
 </html>

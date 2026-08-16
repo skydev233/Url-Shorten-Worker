@@ -121,12 +121,56 @@
   <main class="page">
     <div class="m3-card">
       <div class="m3-spinner" aria-hidden="true"></div>
-      <h1 class="m3-title">Redirecting&hellip;</h1>
-      <p class="m3-subtitle">Taking you to your destination now.</p>
+      <h1 class="m3-title" data-i18n="title">Redirecting&hellip;</h1>
+      <p class="m3-subtitle" data-i18n="subtitle">Taking you to your destination now.</p>
       <a class="m3-dest" href="{Replace}">{Replace}</a>
     </div>
   </main>
   <script>
+    (function () {
+      var I18N = {
+        'en': {
+          'meta.title': 'Redirecting…',
+          'title': 'Redirecting…',
+          'subtitle': 'Taking you to your destination now.'
+        },
+        'zh-CN': {
+          'meta.title': '正在跳转…',
+          'title': '正在跳转…',
+          'subtitle': '正在前往目标网址。'
+        },
+        'zh-TW': {
+          'meta.title': '正在跳轉…',
+          'title': '正在跳轉…',
+          'subtitle': '正在前往目標網址。'
+        }
+      };
+
+      var currentLocale = (function () {
+        var nav = (navigator.language || 'en').toLowerCase();
+        if (nav.indexOf('zh') === 0) {
+          if (nav.indexOf('tw') !== -1 || nav.indexOf('hk') !== -1 || nav.indexOf('hant') !== -1) return 'zh-TW';
+          return 'zh-CN';
+        }
+        return 'zh-CN';
+      })();
+
+      function t(key) {
+        var dict = I18N[currentLocale] || I18N.en || {};
+        return dict[key] != null ? dict[key] : (I18N.en && I18N.en[key] != null ? I18N.en[key] : key);
+      }
+
+      function apply() {
+        document.documentElement.lang = currentLocale;
+        document.title = t('meta.title');
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          el.textContent = t(el.getAttribute('data-i18n'));
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', apply);
+    })();
+
     setTimeout(function () {
       window.location.replace("{Replace}" + window.location.hash);
     }, 1000);

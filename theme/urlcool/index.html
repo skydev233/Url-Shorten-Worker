@@ -124,6 +124,7 @@
     }
 
     .m3-card {
+      position: relative;
       width: 100%;
       max-width: 560px;
       background: var(--md-surface-container-low);
@@ -138,8 +139,32 @@
       text-align: center;
     }
 
-    .m3-headline { font: var(--md-headline-small); color: var(--md-on-surface); margin-bottom: 8px; }
+    .m3-headline { font: var(--md-headline-small); color: var(--md-on-surface); margin-bottom: 8px; padding-right: 128px; }
     .m3-subtitle { font: var(--md-body-medium); color: var(--md-on-surface-variant); margin-bottom: 28px; }
+
+    .m3-lang {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      display: inline-flex;
+      gap: 4px;
+      z-index: 2;
+    }
+    .m3-chip {
+      position: relative;
+      height: 32px;
+      padding: 0 12px;
+      border: 1px solid var(--md-outline);
+      background: transparent;
+      color: var(--md-primary);
+      border-radius: var(--md-shape-sm);
+      font: var(--md-label-medium);
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .m3-chip::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.15s ease; }
+    .m3-chip:hover::after { opacity: 0.08; }
+    .m3-chip.active { background: var(--md-secondary-container); color: var(--md-on-secondary-container); border-color: transparent; }
 
     .m3-text-field { position: relative; display: block; margin-bottom: 24px; }
     .m3-text-field__input {
@@ -253,6 +278,12 @@
     .m3-link:hover::after { opacity: 0.08; }
     .m3-link:active::after { opacity: 0.12; }
 
+    .m3-copyright {
+      margin-top: 10px;
+      font: var(--md-body-medium);
+      color: var(--md-on-surface-variant);
+    }
+
     .m3-note { min-height: 20px; font: var(--md-body-medium); color: var(--md-on-surface-variant); }
     .m3-note--error { color: var(--md-error); }
 
@@ -326,22 +357,28 @@
 <body>
   <main class="page">
     <section class="m3-card">
+      <div class="m3-lang" role="group" data-i18n-aria="lang.label">
+        <button class="m3-chip" type="button" data-lang="en" onclick="setLocale('en')">EN</button>
+        <button class="m3-chip" type="button" data-lang="zh-CN" onclick="setLocale('zh-CN')">简体</button>
+        <button class="m3-chip" type="button" data-lang="zh-TW" onclick="setLocale('zh-TW')">繁體</button>
+      </div>
       <div class="m3-card__body">
-        <h1 class="m3-headline">Shorten your URLs</h1>
-        <p class="m3-subtitle">Paste a long URL and get a short link in one click.</p>
+        <h1 class="m3-headline" data-i18n="form.title">Shorten your URLs</h1>
+        <p class="m3-subtitle" data-i18n="form.subtitle">Paste a long URL and get a short link in one click.</p>
         <form id="shortenForm" onsubmit="return shorturl(event)">
           <label class="m3-text-field">
             <input class="m3-text-field__input" type="text" id="text" placeholder=" " autocomplete="off" spellcheck="false">
-            <span class="m3-text-field__label">Long URL</span>
+            <span class="m3-text-field__label" data-i18n="field.label">Long URL</span>
           </label>
           <div style="text-align: right; margin-bottom: 8px;">
-            <button class="m3-btn" type="submit" id="searchbtn"><span class="m3-btn__label">Shorten it</span></button>
+            <button class="m3-btn" type="submit" id="searchbtn"><span class="m3-btn__label" data-i18n="button.shorten">Shorten it</span></button>
           </div>
         </form>
         <p class="m3-note" id="notice" role="status" aria-live="polite"></p>
       </div>
       <div class="m3-card__footer">
-        <a class="m3-link" href="https://github.com/xyTom/Url-Shorten-Worker/" target="_blank" rel="noopener">Powered by xyTom</a>
+        <a class="m3-link" href="https://github.com/skydev233/Url-Shorten-Worker" target="_blank" rel="noopener" data-i18n="footer.source">Powered by xyTom & skydev233</a>
+        <div class="m3-copyright">© 2020–<span data-year>2026</span> xyTom &amp; skydev233</div>
       </div>
     </section>
   </main>
@@ -349,32 +386,142 @@
   <div class="m3-scrim" id="exampleModal" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
     <div class="m3-dialog">
       <div class="m3-dialog__header">
-        <h2 class="m3-dialog__title" id="dialogTitle">Your short URL</h2>
-        <button class="m3-icon-btn" type="button" onclick="closeModal('exampleModal')" aria-label="Close">&times;</button>
+        <h2 class="m3-dialog__title" id="dialogTitle" data-i18n="dialog.title">Your short URL</h2>
+        <button class="m3-icon-btn" type="button" onclick="closeModal('exampleModal')" data-i18n-aria="dialog.close" aria-label="Close">&times;</button>
       </div>
       <div class="m3-dialog__content">
         <p class="m3-dialog__result" id="result"></p>
       </div>
       <div class="m3-dialog__actions">
-        <button class="m3-btn m3-btn--text" type="button" onclick="closeModal('exampleModal')">Close</button>
-        <button class="m3-btn" type="button" id="copybtn" onclick="copyurl()">Copy</button>
+        <button class="m3-btn m3-btn--text" type="button" onclick="closeModal('exampleModal')" data-i18n="dialog.close">Close</button>
+        <button class="m3-btn" type="button" id="copybtn" onclick="copyurl()" data-i18n="dialog.copy">Copy</button>
       </div>
     </div>
   </div>
 
   <script>
+    (function () {
+      var I18N = {
+        'en': {
+          'meta.title': 'Shorter URL',
+          'form.title': 'Shorten your URLs',
+          'form.subtitle': 'Paste a long URL and get a short link in one click.',
+          'field.label': 'Long URL',
+          'button.shorten': 'Shorten it',
+          'button.working': 'Working…',
+          'dialog.title': 'Your short URL',
+          'dialog.close': 'Close',
+          'dialog.copy': 'Copy',
+          'copy.copied': 'Copied ✓',
+          'copy.failed': 'Copy failed',
+          'error.empty': 'Please enter a URL',
+          'error.invalid': 'Please enter a valid URL (http:// or https://)',
+          'error.failed': 'Unable to shorten this URL. Please try again.',
+          'error.network': 'Network error. Please retry.',
+          'footer.source': 'Powered by xyTom & skydev233',
+          'lang.label': 'Language'
+        },
+        'zh-CN': {
+          'meta.title': '短链接',
+          'form.title': '缩短你的链接',
+          'form.subtitle': '粘贴长链接，一键生成短链接。',
+          'field.label': '长链接',
+          'button.shorten': '立即缩短',
+          'button.working': '处理中…',
+          'dialog.title': '你的短链接',
+          'dialog.close': '关闭',
+          'dialog.copy': '复制',
+          'copy.copied': '已复制 ✓',
+          'copy.failed': '复制失败',
+          'error.empty': '请输入网址',
+          'error.invalid': '请输入有效的网址（需包含 http:// 或 https://）',
+          'error.failed': '无法缩短该网址，请重试。',
+          'error.network': '网络错误，请重试。',
+          'footer.source': '由 xyTom 和 skydev233 提供',
+          'lang.label': '语言'
+        },
+        'zh-TW': {
+          'meta.title': '短連結',
+          'form.title': '縮短你的連結',
+          'form.subtitle': '貼上長連結，一鍵產生短連結。',
+          'field.label': '長連結',
+          'button.shorten': '立即縮短',
+          'button.working': '處理中…',
+          'dialog.title': '你的短連結',
+          'dialog.close': '關閉',
+          'dialog.copy': '複製',
+          'copy.copied': '已複製 ✓',
+          'copy.failed': '複製失敗',
+          'error.empty': '請輸入網址',
+          'error.invalid': '請輸入有效的網址（需包含 http:// 或 https://）',
+          'error.failed': '無法縮短該網址，請重試。',
+          'error.network': '網路錯誤，請重試。',
+          'footer.source': '由 xyTom 和 skydev233 提供',
+          'lang.label': '語言'
+        }
+      };
+
+      var currentLocale = (function () {
+        var saved = null;
+        try { saved = localStorage.getItem('locale'); } catch (e) {}
+        if (saved && I18N[saved]) return saved;
+        var nav = (navigator.language || 'en').toLowerCase();
+        if (nav.indexOf('zh') === 0) {
+          if (nav.indexOf('tw') !== -1 || nav.indexOf('hk') !== -1 || nav.indexOf('hant') !== -1) return 'zh-TW';
+          return 'zh-CN';
+        }
+        return 'zh-CN';
+      })();
+
+      function t(key) {
+        var dict = I18N[currentLocale] || I18N.en || {};
+        return dict[key] != null ? dict[key] : (I18N.en && I18N.en[key] != null ? I18N.en[key] : key);
+      }
+
+      function apply() {
+        document.documentElement.lang = currentLocale;
+        document.title = t('meta.title');
+        document.querySelectorAll('[data-i18n]').forEach(function (el) {
+          el.textContent = t(el.getAttribute('data-i18n'));
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
+          el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+        });
+        document.querySelectorAll('.m3-chip').forEach(function (chip) {
+          chip.classList.toggle('active', chip.getAttribute('data-lang') === currentLocale);
+        });
+      }
+
+      window.setLocale = function (locale) {
+        if (!I18N[locale]) return;
+        currentLocale = locale;
+        try { localStorage.setItem('locale', locale); } catch (e) {}
+        apply();
+        if (window.onLocaleChange) window.onLocaleChange();
+      };
+
+      window.t = t;
+
+      document.addEventListener('DOMContentLoaded', function () {
+        apply();
+        document.querySelectorAll('[data-year]').forEach(function (el) {
+          el.textContent = new Date().getFullYear();
+        });
+      });
+    })();
+
     var generatedUrl = '';
 
     function shorturl(e) {
       if (e) e.preventDefault();
       var input = document.getElementById('text');
       var url = input.value.trim();
-      if (!url) { setNotice('Please enter a URL', true); input.focus(); return false; }
+      if (!url) { setNotice(t('error.empty'), true); input.focus(); return false; }
       try {
         var u = new URL(url);
         if (u.protocol !== 'http:' && u.protocol !== 'https:') throw new Error('bad protocol');
       } catch (err) {
-        setNotice('Please enter a valid URL (http:// or https://)', true);
+        setNotice(t('error.invalid'), true);
         input.focus();
         return false;
       }
@@ -392,10 +539,10 @@
           document.getElementById('result').textContent = generatedUrl;
           openModal('exampleModal');
         } else {
-          setNotice(res && res.error ? res.error : 'Unable to shorten this URL. Please try again.', true);
+          setNotice(res && res.error ? res.error : t('error.failed'), true);
         }
       }).catch(function () {
-        setNotice('Network error. Please retry.', true);
+        setNotice(t('error.network'), true);
       }).finally(function () {
         setLoading(false);
       });
@@ -407,10 +554,10 @@
       var label = btn.querySelector('.m3-btn__label');
       if (on) {
         btn.disabled = true;
-        label.innerHTML = '<span class="m3-spinner"></span>Working&hellip;';
+        label.innerHTML = '<span class="m3-spinner"></span>' + t('button.working');
       } else {
         btn.disabled = false;
-        label.textContent = 'Shorten it';
+        label.textContent = t('button.shorten');
       }
     }
 
@@ -420,9 +567,9 @@
     function copyurl() {
       if (!generatedUrl) return;
       var btn = document.getElementById('copybtn');
-      var original = btn.textContent;
+      var original = t('dialog.copy');
       var done = function (ok) {
-        btn.textContent = ok ? 'Copied ✓' : 'Copy failed';
+        btn.textContent = ok ? t('copy.copied') : t('copy.failed');
         setTimeout(function () { btn.textContent = original; }, 1500);
       };
       if (navigator.clipboard && window.isSecureContext) {
