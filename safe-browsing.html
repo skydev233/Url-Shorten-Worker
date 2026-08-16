@@ -4,12 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Warning! The URL you are visiting is risky · Shorter URL</title>
+  <link rel="icon" href="data:,">
+  <script>
+    (function () {
+      var pref = 'system';
+      try { pref = localStorage.getItem('theme') || 'system'; } catch (e) {}
+      var dark = pref === 'dark' || (pref !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.classList.add('dark');
+    })();
+  </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.0.8/400.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.0.8/500.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.0.8/700.css">
   <style>
     :root {
-      color-scheme: light dark;
+      color-scheme: light;
       --md-primary: #6750a4;
       --md-on-primary: #ffffff;
       --md-error: #b3261e;
@@ -40,25 +49,23 @@
       --md-label-large: 500 14px/20px var(--md-font);
       --md-label-medium: 500 12px/16px var(--md-font);
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --md-primary: #d0bcff;
-        --md-on-primary: #381e72;
-        --md-error: #f2b8b5;
-        --md-on-error: #601410;
-        --md-error-container: #8c1d18;
-        --md-on-error-container: #f9dedc;
-        --md-background: #1c1b1f;
-        --md-on-background: #e6e1e5;
-        --md-surface: #1c1b1f;
-        --md-on-surface: #e6e1e5;
-        --md-on-surface-variant: #cac4d0;
-        --md-outline: #938f99;
-        --md-outline-variant: #49454f;
-        --md-surface-container-low: #1d1b20;
-        --md-surface-container-high: #2b2930;
-        --md-surface-container-highest: #36343b;
-      }
+    :root.dark {
+      --md-primary: #d0bcff;
+      --md-on-primary: #381e72;
+      --md-error: #f2b8b5;
+      --md-on-error: #601410;
+      --md-error-container: #8c1d18;
+      --md-on-error-container: #f9dedc;
+      --md-background: #1c1b1f;
+      --md-on-background: #e6e1e5;
+      --md-surface: #1c1b1f;
+      --md-on-surface: #e6e1e5;
+      --md-on-surface-variant: #cac4d0;
+      --md-outline: #938f99;
+      --md-outline-variant: #49454f;
+      --md-surface-container-low: #1d1b20;
+      --md-surface-container-high: #2b2930;
+      --md-surface-container-highest: #36343b;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -88,36 +95,74 @@
       box-shadow: var(--md-elev-1);
       overflow: hidden;
     }
-    .m3-card__body { padding: 32px 28px 24px; }
+    .m3-card__body { padding: 64px 28px 24px; }
     .m3-card__footer {
       padding: 12px 28px;
       border-top: 1px solid var(--md-outline-variant);
       text-align: center;
     }
 
-    .m3-lang {
+    .m3-topbar {
       position: absolute;
-      top: 20px;
-      right: 24px;
-      display: inline-flex;
-      gap: 4px;
-      z-index: 2;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      gap: 2px;
+      z-index: 3;
     }
-    .m3-chip {
+    .m3-dropdown { position: relative; }
+    .m3-icon-btn {
       position: relative;
-      height: 32px;
-      padding: 0 12px;
-      border: 1px solid var(--md-outline);
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 50%;
       background: transparent;
-      color: var(--md-primary);
-      border-radius: var(--md-shape-sm);
-      font: var(--md-label-medium);
+      color: var(--md-on-surface-variant);
       cursor: pointer;
       overflow: hidden;
     }
-    .m3-chip::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.15s ease; }
-    .m3-chip:hover::after { opacity: 0.08; }
-    .m3-chip.active { background: var(--md-error-container); color: var(--md-on-error-container); border-color: transparent; }
+    .m3-icon-btn::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.15s ease; }
+    .m3-icon-btn:hover::after { opacity: 0.08; }
+    .m3-icon-btn:active::after { opacity: 0.12; }
+    .m3-icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
+    .m3-menu {
+      position: absolute;
+      top: 44px;
+      left: 0;
+      min-width: 168px;
+      padding: 8px 0;
+      background: var(--md-surface-container-high);
+      border-radius: var(--md-shape-xs);
+      box-shadow: var(--md-elev-1);
+      z-index: 4;
+      overflow: hidden;
+    }
+    .m3-menu[hidden] { display: none; }
+    .m3-menu-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-height: 48px;
+      padding: 0 16px;
+      border: none;
+      background: transparent;
+      color: var(--md-on-surface);
+      font: var(--md-body-large);
+      font-family: var(--md-font);
+      text-align: left;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .m3-menu-item::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.15s ease; }
+    .m3-menu-item:hover::after { opacity: 0.08; }
+    .m3-menu-item::before { content: "✓"; width: 24px; font-weight: 700; opacity: 0; }
+    .m3-menu-item.active { color: var(--md-primary); }
+    .m3-menu-item.active::before { opacity: 1; }
 
     .m3-warning-icon {
       width: 56px;
@@ -132,7 +177,7 @@
     }
     .m3-warning-icon svg { width: 28px; height: 28px; fill: currentColor; }
 
-    .m3-title { font: var(--md-headline-small); color: var(--md-on-surface); margin-bottom: 8px; padding-right: 128px; }
+    .m3-title { font: var(--md-headline-small); color: var(--md-on-surface); margin-bottom: 8px; }
     .m3-subtitle {
       font: var(--md-body-medium);
       color: var(--md-on-surface-variant);
@@ -199,9 +244,26 @@
 <body>
   <main class="page">
     <section class="m3-card">
-      <div class="m3-lang" role="group" data-i18n-aria="lang.label">
-        <button class="m3-chip" type="button" data-lang="en" onclick="setLocale('en')">EN</button>
-        <button class="m3-chip" type="button" data-lang="zh-CN" onclick="setLocale('zh-CN')">简体</button>
+      <div class="m3-topbar">
+        <div class="m3-dropdown">
+          <button class="m3-icon-btn" type="button" data-i18n-aria="lang.label" aria-haspopup="true" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+          </button>
+          <div class="m3-menu" id="langMenu" role="menu" hidden>
+            <button class="m3-menu-item" type="button" role="menuitemradio" data-lang="zh-CN" onclick="setLocale('zh-CN')">简体中文</button>
+            <button class="m3-menu-item" type="button" role="menuitemradio" data-lang="en" onclick="setLocale('en')">English</button>
+          </div>
+        </div>
+        <div class="m3-dropdown">
+          <button class="m3-icon-btn" type="button" data-i18n-aria="theme.label" aria-haspopup="true" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+          </button>
+          <div class="m3-menu" id="themeMenu" role="menu" hidden>
+            <button class="m3-menu-item" type="button" role="menuitemradio" data-theme-opt="system" onclick="setTheme('system')" data-i18n="theme.system">跟随系统</button>
+            <button class="m3-menu-item" type="button" role="menuitemradio" data-theme-opt="light" onclick="setTheme('light')" data-i18n="theme.light">浅色</button>
+            <button class="m3-menu-item" type="button" role="menuitemradio" data-theme-opt="dark" onclick="setTheme('dark')" data-i18n="theme.dark">深色</button>
+          </div>
+        </div>
       </div>
       <div class="m3-card__body">
         <div class="m3-warning-icon" aria-hidden="true">
@@ -220,7 +282,7 @@
       </div>
       <div class="m3-card__footer">
         <a class="m3-link" href="https://github.com/skydev233/Url-Shorten-Worker" target="_blank" rel="noopener" data-i18n="footer.source">Powered by Url Shorten Worker</a>
-        <div class="m3-copyright">© 2020–<span data-year>2026</span> xyTom &amp; skydev233</div>
+        <div class="m3-copyright">Copyright © 2020–<span data-year>2026</span> xyTom &amp; skydev233</div>
       </div>
     </section>
   </main>
@@ -235,7 +297,11 @@
           'field.label': 'Risky URL',
           'banner': 'For your protection, we will not automatically redirect to this URL. We recommend that you close this page. If you still need to visit it, manually copy the link above into your browser\'s address bar. Thank you.',
           'footer.source': 'Powered by Url Shorten Worker',
-          'lang.label': 'Language'
+          'lang.label': 'Language',
+          'theme.label': 'Theme',
+          'theme.system': 'System',
+          'theme.light': 'Light',
+          'theme.dark': 'Dark'
         },
         'zh-CN': {
           'meta.title': '警告！你访问的网址存在风险 · 短链接',
@@ -244,7 +310,11 @@
           'field.label': '危险网址',
           'banner': '为保护你的安全，我们不会自动跳转到该网址。建议你关闭此页面并停止访问。如果仍需访问，请手动将上方链接复制到浏览器地址栏打开。谢谢。',
           'footer.source': '由 Url Shorten Worker 提供',
-          'lang.label': '语言'
+          'lang.label': '语言',
+          'theme.label': '主题',
+          'theme.system': '跟随系统',
+          'theme.light': '浅色',
+          'theme.dark': '深色'
         }
       };
 
@@ -269,8 +339,8 @@
         document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
           el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
         });
-        document.querySelectorAll('.m3-chip').forEach(function (chip) {
-          chip.classList.toggle('active', chip.getAttribute('data-lang') === currentLocale);
+        document.querySelectorAll('.m3-menu-item[data-lang]').forEach(function (item) {
+          item.classList.toggle('active', item.getAttribute('data-lang') === currentLocale);
         });
       }
 
@@ -289,6 +359,51 @@
         });
       });
     })();
+
+    // ---- Theme ----
+    var themePref = 'system';
+    try { themePref = localStorage.getItem('theme') || 'system'; } catch (e) {}
+
+    function applyTheme() {
+      var dark = themePref === 'dark' || (themePref !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.classList.toggle('dark', dark);
+      document.querySelectorAll('[data-theme-opt]').forEach(function (item) {
+        item.classList.toggle('active', item.getAttribute('data-theme-opt') === themePref);
+      });
+    }
+
+    window.setTheme = function (pref) {
+      if (['light', 'dark', 'system'].indexOf(pref) === -1) return;
+      themePref = pref;
+      try { localStorage.setItem('theme', pref); } catch (e) {}
+      applyTheme();
+    };
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+      if (themePref === 'system') applyTheme();
+    });
+
+    applyTheme();
+
+    // ---- Dropdowns ----
+    function closeAllDropdowns() {
+      document.querySelectorAll('.m3-dropdown').forEach(function (dd) {
+        dd.querySelector('.m3-menu').hidden = true;
+        dd.querySelector('.m3-icon-btn').setAttribute('aria-expanded', 'false');
+      });
+    }
+    document.querySelectorAll('.m3-dropdown').forEach(function (dd) {
+      var btn = dd.querySelector('.m3-icon-btn');
+      var menu = dd.querySelector('.m3-menu');
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var willOpen = menu.hidden;
+        closeAllDropdowns();
+        menu.hidden = !willOpen;
+        btn.setAttribute('aria-expanded', String(!menu.hidden));
+      });
+    });
+    document.addEventListener('click', closeAllDropdowns);
   </script>
 </body>
 </html>

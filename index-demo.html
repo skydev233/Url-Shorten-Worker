@@ -4,12 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>短链生成器</title>
+  <link rel="icon" href="data:,">
+  <script>
+    (function () {
+      var pref = 'system';
+      try { pref = localStorage.getItem('theme') || 'system'; } catch (e) {}
+      var dark = pref === 'dark' || (pref !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (dark) document.documentElement.classList.add('dark');
+    })();
+  </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.0.8/400.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.0.8/500.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.0.8/700.css">
   <style>
     :root {
-      color-scheme: light dark;
+      color-scheme: light;
       --md-primary: #6750a4;
       --md-on-primary: #ffffff;
       --md-primary-container: #eaddff;
@@ -62,46 +71,44 @@
       --md-label-large: 500 14px/20px var(--md-font);
       --md-label-medium: 500 12px/16px var(--md-font);
     }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --md-primary: #d0bcff;
-        --md-on-primary: #381e72;
-        --md-primary-container: #4f378b;
-        --md-on-primary-container: #eaddff;
-        --md-secondary: #ccc2dc;
-        --md-on-secondary: #332d41;
-        --md-secondary-container: #4a4458;
-        --md-on-secondary-container: #e8def8;
-        --md-tertiary: #efb8c8;
-        --md-on-tertiary: #492532;
-        --md-tertiary-container: #633b48;
-        --md-on-tertiary-container: #ffd8e4;
-        --md-error: #f2b8b5;
-        --md-on-error: #601410;
-        --md-error-container: #8c1d18;
-        --md-on-error-container: #f9dedc;
-        --md-background: #1c1b1f;
-        --md-on-background: #e6e1e5;
-        --md-surface: #1c1b1f;
-        --md-on-surface: #e6e1e5;
-        --md-surface-variant: #49454f;
-        --md-on-surface-variant: #cac4d0;
-        --md-outline: #938f99;
-        --md-outline-variant: #49454f;
-        --md-surface-container-lowest: #0f0d13;
-        --md-surface-container-low: #1d1b20;
-        --md-surface-container: #211f26;
-        --md-surface-container-high: #2b2930;
-        --md-surface-container-highest: #36343b;
-        --md-inverse-surface: #e6e1e5;
-        --md-inverse-on-surface: #313033;
-        --md-inverse-primary: #6750a4;
-        --md-scrim: rgba(0, 0, 0, 0.6);
-        --md-elev-1: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.3);
-        --md-elev-2: 0 2px 6px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.3);
-        --md-elev-3: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
-        --md-elev-4: 0 6px 10px 4px rgba(0, 0, 0, 0.15), 0 2px 3px rgba(0, 0, 0, 0.3);
-      }
+    :root.dark {
+      --md-primary: #d0bcff;
+      --md-on-primary: #381e72;
+      --md-primary-container: #4f378b;
+      --md-on-primary-container: #eaddff;
+      --md-secondary: #ccc2dc;
+      --md-on-secondary: #332d41;
+      --md-secondary-container: #4a4458;
+      --md-on-secondary-container: #e8def8;
+      --md-tertiary: #efb8c8;
+      --md-on-tertiary: #492532;
+      --md-tertiary-container: #633b48;
+      --md-on-tertiary-container: #ffd8e4;
+      --md-error: #f2b8b5;
+      --md-on-error: #601410;
+      --md-error-container: #8c1d18;
+      --md-on-error-container: #f9dedc;
+      --md-background: #1c1b1f;
+      --md-on-background: #e6e1e5;
+      --md-surface: #1c1b1f;
+      --md-on-surface: #e6e1e5;
+      --md-surface-variant: #49454f;
+      --md-on-surface-variant: #cac4d0;
+      --md-outline: #938f99;
+      --md-outline-variant: #49454f;
+      --md-surface-container-lowest: #0f0d13;
+      --md-surface-container-low: #1d1b20;
+      --md-surface-container: #211f26;
+      --md-surface-container-high: #2b2930;
+      --md-surface-container-highest: #36343b;
+      --md-inverse-surface: #e6e1e5;
+      --md-inverse-on-surface: #313033;
+      --md-inverse-primary: #6750a4;
+      --md-scrim: rgba(0, 0, 0, 0.6);
+      --md-elev-1: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.3);
+      --md-elev-2: 0 2px 6px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.3);
+      --md-elev-3: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
+      --md-elev-4: 0 6px 10px 4px rgba(0, 0, 0, 0.15), 0 2px 3px rgba(0, 0, 0, 0.3);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -132,39 +139,60 @@
       box-shadow: var(--md-elev-1);
       overflow: hidden;
     }
-    .m3-card__body { padding: 32px 28px 24px; }
+    .m3-card__body { padding: 64px 28px 24px; }
     .m3-card__footer {
       padding: 12px 28px;
       border-top: 1px solid var(--md-outline-variant);
       text-align: center;
     }
 
-    .m3-headline { font: var(--md-headline-small); color: var(--md-on-surface); margin-bottom: 8px; padding-right: 128px; }
+    .m3-headline { font: var(--md-headline-small); color: var(--md-on-surface); margin-bottom: 8px; }
     .m3-subtitle { font: var(--md-body-medium); color: var(--md-on-surface-variant); margin-bottom: 28px; word-break: break-all; }
 
-    .m3-lang {
+    .m3-topbar {
       position: absolute;
-      top: 20px;
-      right: 24px;
-      display: inline-flex;
-      gap: 4px;
-      z-index: 2;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      gap: 2px;
+      z-index: 3;
     }
-    .m3-chip {
+    .m3-dropdown { position: relative; }
+    .m3-icon-btn svg { width: 20px; height: 20px; fill: currentColor; }
+    .m3-menu {
+      position: absolute;
+      top: 44px;
+      left: 0;
+      min-width: 168px;
+      padding: 8px 0;
+      background: var(--md-surface-container-high);
+      border-radius: var(--md-shape-xs);
+      box-shadow: var(--md-elev-3);
+      z-index: 4;
+      overflow: hidden;
+    }
+    .m3-menu[hidden] { display: none; }
+    .m3-menu-item {
       position: relative;
-      height: 32px;
-      padding: 0 12px;
-      border: 1px solid var(--md-outline);
+      display: flex;
+      align-items: center;
+      width: 100%;
+      min-height: 48px;
+      padding: 0 16px;
+      border: none;
       background: transparent;
-      color: var(--md-primary);
-      border-radius: var(--md-shape-sm);
-      font: var(--md-label-medium);
+      color: var(--md-on-surface);
+      font: var(--md-body-large);
+      font-family: var(--md-font);
+      text-align: left;
       cursor: pointer;
       overflow: hidden;
     }
-    .m3-chip::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.15s ease; }
-    .m3-chip:hover::after { opacity: 0.08; }
-    .m3-chip.active { background: var(--md-secondary-container); color: var(--md-on-secondary-container); border-color: transparent; }
+    .m3-menu-item::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.15s ease; }
+    .m3-menu-item:hover::after { opacity: 0.08; }
+    .m3-menu-item::before { content: "✓"; width: 24px; font-weight: 700; opacity: 0; }
+    .m3-menu-item.active { color: var(--md-primary); }
+    .m3-menu-item.active::before { opacity: 1; }
 
     .m3-banner {
       display: flex;
@@ -371,9 +399,26 @@
 <body>
   <main class="page">
     <section class="m3-card">
-      <div class="m3-lang" role="group" data-i18n-aria="lang.label">
-        <button class="m3-chip" type="button" data-lang="en" onclick="setLocale('en')">EN</button>
-        <button class="m3-chip" type="button" data-lang="zh-CN" onclick="setLocale('zh-CN')">简体</button>
+      <div class="m3-topbar">
+        <div class="m3-dropdown">
+          <button class="m3-icon-btn" type="button" data-i18n-aria="lang.label" aria-haspopup="true" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.87 15.07l-2.54-2.51.03-.03A17.52 17.52 0 0014.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11.76-2.04zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2l-4.5-12zm-2.62 7l1.62-4.33L19.12 17h-3.24z"/></svg>
+          </button>
+          <div class="m3-menu" id="langMenu" role="menu" hidden>
+            <button class="m3-menu-item" type="button" role="menuitemradio" data-lang="zh-CN" onclick="setLocale('zh-CN')">简体中文</button>
+            <button class="m3-menu-item" type="button" role="menuitemradio" data-lang="en" onclick="setLocale('en')">English</button>
+          </div>
+        </div>
+        <div class="m3-dropdown">
+          <button class="m3-icon-btn" type="button" data-i18n-aria="theme.label" aria-haspopup="true" aria-expanded="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+          </button>
+          <div class="m3-menu" id="themeMenu" role="menu" hidden>
+            <button class="m3-menu-item" type="button" role="menuitemradio" data-theme-opt="system" onclick="setTheme('system')" data-i18n="theme.system">跟随系统</button>
+            <button class="m3-menu-item" type="button" role="menuitemradio" data-theme-opt="light" onclick="setTheme('light')" data-i18n="theme.light">浅色</button>
+            <button class="m3-menu-item" type="button" role="menuitemradio" data-theme-opt="dark" onclick="setTheme('dark')" data-i18n="theme.dark">深色</button>
+          </div>
+        </div>
       </div>
       <div class="m3-card__body">
         <h1 class="m3-headline" data-i18n="form.title">Shorten your URL</h1>
@@ -395,7 +440,7 @@
       </div>
       <div class="m3-card__footer">
         <a class="m3-link" href="https://github.com/skydev233/Url-Shorten-Worker" target="_blank" rel="noopener" data-i18n="footer.source">View source on GitHub</a>
-        <div class="m3-copyright">© 2020–<span data-year>2026</span> xyTom &amp; skydev233</div>
+        <div class="m3-copyright">Copyright © 2020–<span data-year>2026</span> xyTom &amp; skydev233</div>
       </div>
     </section>
   </main>
@@ -437,7 +482,11 @@
           'error.failed': 'Unable to shorten this URL. Please try again.',
           'error.network': 'Network error. Please retry.',
           'footer.source': 'View source on GitHub',
-          'lang.label': 'Language'
+          'lang.label': 'Language',
+          'theme.label': 'Theme',
+          'theme.system': 'System',
+          'theme.light': 'Light',
+          'theme.dark': 'Dark'
         },
         'zh-CN': {
           'meta.title': '短链生成器',
@@ -457,7 +506,11 @@
           'error.failed': '无法缩短该网址，请重试。',
           'error.network': '网络错误，请重试。',
           'footer.source': '在 GitHub 查看源码',
-          'lang.label': '语言'
+          'lang.label': '语言',
+          'theme.label': '主题',
+          'theme.system': '跟随系统',
+          'theme.light': '浅色',
+          'theme.dark': '深色'
         }
       };
 
@@ -482,8 +535,8 @@
         document.querySelectorAll('[data-i18n-aria]').forEach(function (el) {
           el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
         });
-        document.querySelectorAll('.m3-chip').forEach(function (chip) {
-          chip.classList.toggle('active', chip.getAttribute('data-lang') === currentLocale);
+        document.querySelectorAll('.m3-menu-item[data-lang]').forEach(function (item) {
+          item.classList.toggle('active', item.getAttribute('data-lang') === currentLocale);
         });
       }
 
@@ -596,6 +649,51 @@
     document.getElementById('exampleModal').addEventListener('click', function (e) {
       if (e.target === this) closeModal('exampleModal');
     });
+
+    // ---- Theme ----
+    var themePref = 'system';
+    try { themePref = localStorage.getItem('theme') || 'system'; } catch (e) {}
+
+    function applyTheme() {
+      var dark = themePref === 'dark' || (themePref !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.classList.toggle('dark', dark);
+      document.querySelectorAll('[data-theme-opt]').forEach(function (item) {
+        item.classList.toggle('active', item.getAttribute('data-theme-opt') === themePref);
+      });
+    }
+
+    window.setTheme = function (pref) {
+      if (['light', 'dark', 'system'].indexOf(pref) === -1) return;
+      themePref = pref;
+      try { localStorage.setItem('theme', pref); } catch (e) {}
+      applyTheme();
+    };
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+      if (themePref === 'system') applyTheme();
+    });
+
+    applyTheme();
+
+    // ---- Dropdowns ----
+    function closeAllDropdowns() {
+      document.querySelectorAll('.m3-dropdown').forEach(function (dd) {
+        dd.querySelector('.m3-menu').hidden = true;
+        dd.querySelector('.m3-icon-btn').setAttribute('aria-expanded', 'false');
+      });
+    }
+    document.querySelectorAll('.m3-dropdown').forEach(function (dd) {
+      var btn = dd.querySelector('.m3-icon-btn');
+      var menu = dd.querySelector('.m3-menu');
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var willOpen = menu.hidden;
+        closeAllDropdowns();
+        menu.hidden = !willOpen;
+        btn.setAttribute('aria-expanded', String(!menu.hidden));
+      });
+    });
+    document.addEventListener('click', closeAllDropdowns);
 
     document.querySelectorAll('.m3-btn, .m3-icon-btn, .m3-link').forEach(function (el) {
       el.addEventListener('pointerdown', function (e) {
