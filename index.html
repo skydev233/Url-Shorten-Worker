@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shorter URL</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.0.8/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.0.8/500.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/roboto@5.0.8/700.css">
+  <style>
+    :root {
+      color-scheme: light dark;
+      --md-primary: #6750a4;
+      --md-on-primary: #ffffff;
+      --md-primary-container: #eaddff;
+      --md-on-primary-container: #21005d;
+      --md-secondary: #625b71;
+      --md-on-secondary: #ffffff;
+      --md-secondary-container: #e8def8;
+      --md-on-secondary-container: #1d192b;
+      --md-tertiary: #7d5260;
+      --md-on-tertiary: #ffffff;
+      --md-tertiary-container: #ffd8e4;
+      --md-on-tertiary-container: #31111d;
+      --md-error: #b3261e;
+      --md-on-error: #ffffff;
+      --md-error-container: #f9dedc;
+      --md-on-error-container: #410e0b;
+      --md-background: #fffbfe;
+      --md-on-background: #1c1b1f;
+      --md-surface: #fffbfe;
+      --md-on-surface: #1c1b1f;
+      --md-surface-variant: #e7e0ec;
+      --md-on-surface-variant: #49454f;
+      --md-outline: #79747e;
+      --md-outline-variant: #cac4d0;
+      --md-surface-container-lowest: #ffffff;
+      --md-surface-container-low: #f7f2fa;
+      --md-surface-container: #f3edf7;
+      --md-surface-container-high: #ece6f0;
+      --md-surface-container-highest: #e6e0e9;
+      --md-inverse-surface: #313033;
+      --md-inverse-on-surface: #f4eff4;
+      --md-inverse-primary: #d0bcff;
+      --md-scrim: rgba(0, 0, 0, 0.4);
+      --md-elev-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
+      --md-elev-2: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
+      --md-elev-3: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 8px 3px rgba(0, 0, 0, 0.15);
+      --md-elev-4: 0 2px 3px rgba(0, 0, 0, 0.3), 0 6px 10px 4px rgba(0, 0, 0, 0.15);
+      --md-shape-xs: 4px;
+      --md-shape-sm: 8px;
+      --md-shape-md: 12px;
+      --md-shape-lg: 16px;
+      --md-shape-xl: 28px;
+      --md-shape-full: 999px;
+      --md-font: 'Roboto', system-ui, -apple-system, 'Segoe UI', sans-serif;
+      --md-display-small: 400 36px/44px var(--md-font);
+      --md-headline-small: 400 24px/32px var(--md-font);
+      --md-title-large: 400 22px/28px var(--md-font);
+      --md-body-large: 400 16px/24px var(--md-font);
+      --md-body-medium: 400 14px/20px var(--md-font);
+      --md-label-large: 500 14px/20px var(--md-font);
+      --md-label-medium: 500 12px/16px var(--md-font);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --md-primary: #d0bcff;
+        --md-on-primary: #381e72;
+        --md-primary-container: #4f378b;
+        --md-on-primary-container: #eaddff;
+        --md-secondary: #ccc2dc;
+        --md-on-secondary: #332d41;
+        --md-secondary-container: #4a4458;
+        --md-on-secondary-container: #e8def8;
+        --md-tertiary: #efb8c8;
+        --md-on-tertiary: #492532;
+        --md-tertiary-container: #633b48;
+        --md-on-tertiary-container: #ffd8e4;
+        --md-error: #f2b8b5;
+        --md-on-error: #601410;
+        --md-error-container: #8c1d18;
+        --md-on-error-container: #f9dedc;
+        --md-background: #1c1b1f;
+        --md-on-background: #e6e1e5;
+        --md-surface: #1c1b1f;
+        --md-on-surface: #e6e1e5;
+        --md-surface-variant: #49454f;
+        --md-on-surface-variant: #cac4d0;
+        --md-outline: #938f99;
+        --md-outline-variant: #49454f;
+        --md-surface-container-lowest: #0f0d13;
+        --md-surface-container-low: #1d1b20;
+        --md-surface-container: #211f26;
+        --md-surface-container-high: #2b2930;
+        --md-surface-container-highest: #36343b;
+        --md-inverse-surface: #e6e1e5;
+        --md-inverse-on-surface: #313033;
+        --md-inverse-primary: #6750a4;
+        --md-scrim: rgba(0, 0, 0, 0.6);
+        --md-elev-1: 0 1px 3px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.3);
+        --md-elev-2: 0 2px 6px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.3);
+        --md-elev-3: 0 4px 8px 3px rgba(0, 0, 0, 0.15), 0 1px 3px rgba(0, 0, 0, 0.3);
+        --md-elev-4: 0 6px 10px 4px rgba(0, 0, 0, 0.15), 0 2px 3px rgba(0, 0, 0, 0.3);
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font: var(--md-body-medium);
+      font-family: var(--md-font);
+      background: var(--md-background);
+      color: var(--md-on-background);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .m3-card {
+      width: 100%;
+      max-width: 560px;
+      background: var(--md-surface-container-low);
+      border-radius: var(--md-shape-xl);
+      box-shadow: var(--md-elev-1);
+      overflow: hidden;
+    }
+    .m3-card__body { padding: 32px 28px 24px; }
+    .m3-card__footer {
+      padding: 12px 28px;
+      border-top: 1px solid var(--md-outline-variant);
+      text-align: center;
+    }
+
+    .m3-headline { font: var(--md-headline-small); color: var(--md-on-surface); margin-bottom: 8px; }
+    .m3-subtitle { font: var(--md-body-medium); color: var(--md-on-surface-variant); margin-bottom: 28px; }
+
+    .m3-text-field { position: relative; display: block; margin-bottom: 24px; }
+    .m3-text-field__input {
+      width: 100%;
+      height: 56px;
+      padding: 22px 16px 6px;
+      font: var(--md-body-large);
+      font-family: var(--md-font);
+      color: var(--md-on-surface);
+      background: var(--md-surface-container-highest);
+      border: none;
+      border-bottom: 1px solid var(--md-on-surface-variant);
+      border-radius: var(--md-shape-xs) var(--md-shape-xs) 0 0;
+      outline: none;
+      caret-color: var(--md-primary);
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+    .m3-text-field__input::placeholder { color: transparent; }
+    .m3-text-field__input:hover { background: var(--md-surface-container-high); }
+    .m3-text-field__input:focus {
+      background: var(--md-surface-container-high);
+      border-bottom: 2px solid var(--md-primary);
+      padding-bottom: 5px;
+    }
+    .m3-text-field__label {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      font: var(--md-body-large);
+      color: var(--md-on-surface-variant);
+      pointer-events: none;
+      transition: top 0.15s ease, font-size 0.15s ease, color 0.15s ease;
+    }
+    .m3-text-field__input:focus ~ .m3-text-field__label,
+    .m3-text-field__input:not(:placeholder-shown) ~ .m3-text-field__label {
+      top: 6px;
+      font-size: 12px;
+      color: var(--md-primary);
+    }
+
+    .m3-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 40px;
+      padding: 0 24px;
+      border: none;
+      border-radius: var(--md-shape-full);
+      font: var(--md-label-large);
+      letter-spacing: 0.1px;
+      color: var(--md-on-primary);
+      background: var(--md-primary);
+      cursor: pointer;
+      overflow: hidden;
+      user-select: none;
+      box-shadow: var(--md-elev-1);
+      transition: box-shadow 0.2s ease;
+    }
+    .m3-btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: currentColor;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    .m3-btn:hover { box-shadow: var(--md-elev-2); }
+    .m3-btn:hover::after { opacity: 0.08; }
+    .m3-btn:active::after { opacity: 0.12; }
+    .m3-btn:disabled { background: var(--md-on-surface); opacity: 0.12; box-shadow: none; cursor: default; }
+    .m3-btn:disabled::after { opacity: 0; }
+    .m3-btn--tonal { background: var(--md-secondary-container); color: var(--md-on-secondary-container); }
+    .m3-btn--outlined { background: transparent; color: var(--md-primary); border: 1px solid var(--md-outline); box-shadow: none; }
+    .m3-btn--text { background: transparent; color: var(--md-primary); box-shadow: none; padding: 0 12px; }
+    .m3-btn--error { background: var(--md-error); color: var(--md-on-error); }
+    .m3-btn__label { display: inline-flex; align-items: center; gap: 8px; }
+
+    .m3-spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-top-color: currentColor;
+      animation: m3-spin 0.7s linear infinite;
+    }
+    @keyframes m3-spin { to { transform: rotate(360deg); } }
+
+    .m3-link {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      height: 40px;
+      padding: 0 12px;
+      border-radius: var(--md-shape-full);
+      font: var(--md-label-large);
+      color: var(--md-primary);
+      text-decoration: none;
+      overflow: hidden;
+    }
+    .m3-link::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: currentColor;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+    .m3-link:hover::after { opacity: 0.08; }
+    .m3-link:active::after { opacity: 0.12; }
+
+    .m3-note { min-height: 20px; font: var(--md-body-medium); color: var(--md-on-surface-variant); }
+    .m3-note--error { color: var(--md-error); }
+
+    .m3-scrim {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--md-scrim);
+      padding: 24px;
+      z-index: 1000;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease, visibility 0.2s ease;
+    }
+    .m3-scrim.open { visibility: visible; opacity: 1; }
+    .m3-dialog {
+      width: 100%;
+      max-width: 400px;
+      background: var(--md-surface-container-high);
+      border-radius: var(--md-shape-xl);
+      padding: 24px;
+      color: var(--md-on-surface);
+      box-shadow: var(--md-elev-4);
+      transform: scale(0.9);
+      transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+    }
+    .m3-scrim.open .m3-dialog { transform: scale(1); }
+    .m3-dialog__header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .m3-dialog__title { font: var(--md-title-large); }
+    .m3-icon-btn {
+      position: relative;
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--md-on-surface-variant);
+      font-size: 18px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .m3-icon-btn::after { content: ""; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity 0.15s ease; }
+    .m3-icon-btn:hover::after { opacity: 0.08; }
+    .m3-icon-btn:active::after { opacity: 0.12; }
+    .m3-dialog__content { margin-bottom: 24px; }
+    .m3-dialog__result {
+      font: var(--md-body-large);
+      color: var(--md-primary);
+      word-break: break-all;
+      padding: 16px;
+      background: var(--md-surface-container-highest);
+      border-radius: var(--md-shape-md);
+    }
+    .m3-dialog__actions { display: flex; justify-content: flex-end; gap: 8px; }
+
+    .m3-ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.2;
+      transform: scale(0);
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="m3-card">
+      <div class="m3-card__body">
+        <h1 class="m3-headline">🎁 Shorten your URLs</h1>
+        <p class="m3-subtitle">Paste a long URL and get a short link in one click.</p>
+        <form id="shortenForm" onsubmit="return shorturl(event)">
+          <label class="m3-text-field">
+            <input class="m3-text-field__input" type="text" id="text" placeholder=" " autocomplete="off" spellcheck="false">
+            <span class="m3-text-field__label">Long URL</span>
+          </label>
+          <div style="text-align: right; margin-bottom: 8px;">
+            <button class="m3-btn" type="submit" id="searchbtn"><span class="m3-btn__label">Shorten it</span></button>
+          </div>
+        </form>
+        <p class="m3-note" id="notice" role="status" aria-live="polite"></p>
+      </div>
+      <div class="m3-card__footer">
+        <a class="m3-link" href="https://github.com/xyTom/Url-Shorten-Worker/" target="_blank" rel="noopener">View source on GitHub</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="m3-scrim" id="exampleModal" role="dialog" aria-modal="true" aria-labelledby="dialogTitle">
+    <div class="m3-dialog">
+      <div class="m3-dialog__header">
+        <h2 class="m3-dialog__title" id="dialogTitle">Your short URL</h2>
+        <button class="m3-icon-btn" type="button" onclick="closeModal('exampleModal')" aria-label="Close">&times;</button>
+      </div>
+      <div class="m3-dialog__content">
+        <p class="m3-dialog__result" id="result"></p>
+      </div>
+      <div class="m3-dialog__actions">
+        <button class="m3-btn m3-btn--text" type="button" onclick="closeModal('exampleModal')">Close</button>
+        <button class="m3-btn" type="button" id="copybtn" onclick="copyurl()">Copy</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var generatedUrl = '';
+
+    function shorturl(e) {
+      if (e) e.preventDefault();
+      var input = document.getElementById('text');
+      var url = input.value.trim();
+      if (!url) { setNotice('Please enter a URL', true); input.focus(); return false; }
+      try {
+        var u = new URL(url);
+        if (u.protocol !== 'http:' && u.protocol !== 'https:') throw new Error('bad protocol');
+      } catch (err) {
+        setNotice('Please enter a valid URL (http:// or https://)', true);
+        input.focus();
+        return false;
+      }
+
+      setLoading(true);
+      setNotice('');
+
+      fetch(window.location.pathname, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: url })
+      }).then(function (r) { return r.json(); }).then(function (res) {
+        if (res && res.key) {
+          generatedUrl = window.location.origin + (res.key.charAt(0) === '/' ? res.key : '/' + res.key);
+          document.getElementById('result').textContent = generatedUrl;
+          openModal('exampleModal');
+        } else {
+          setNotice(res && res.error ? res.error : 'Unable to shorten this URL. Please try again.', true);
+        }
+      }).catch(function () {
+        setNotice('Network error. Please retry.', true);
+      }).finally(function () {
+        setLoading(false);
+      });
+      return false;
+    }
+
+    function setLoading(on) {
+      var btn = document.getElementById('searchbtn');
+      var label = btn.querySelector('.m3-btn__label');
+      if (on) {
+        btn.disabled = true;
+        label.innerHTML = '<span class="m3-spinner"></span>Working&hellip;';
+      } else {
+        btn.disabled = false;
+        label.textContent = 'Shorten it';
+      }
+    }
+
+    function openModal(id) { document.getElementById(id).classList.add('open'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+    function copyurl() {
+      if (!generatedUrl) return;
+      var btn = document.getElementById('copybtn');
+      var original = btn.textContent;
+      var done = function (ok) {
+        btn.textContent = ok ? 'Copied ✓' : 'Copy failed';
+        setTimeout(function () { btn.textContent = original; }, 1500);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(generatedUrl).then(function () { done(true); }, function () { done(false); });
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = generatedUrl;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { done(document.execCommand('copy')); } catch (err) { done(false); }
+        ta.remove();
+      }
+    }
+
+    function setNotice(msg, isError) {
+      var n = document.getElementById('notice');
+      n.textContent = msg || '';
+      n.className = 'm3-note' + (msg && isError ? ' m3-note--error' : '');
+    }
+
+    document.getElementById('shortenForm').addEventListener('submit', shorturl);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeModal('exampleModal');
+    });
+
+    document.getElementById('exampleModal').addEventListener('click', function (e) {
+      if (e.target === this) closeModal('exampleModal');
+    });
+
+    // Material ripple for buttons
+    document.querySelectorAll('.m3-btn, .m3-icon-btn, .m3-link').forEach(function (el) {
+      el.addEventListener('pointerdown', function (e) {
+        var r = el.getBoundingClientRect();
+        var d = Math.max(r.width, r.height) * 2;
+        var ripple = document.createElement('span');
+        ripple.className = 'm3-ripple';
+        ripple.style.width = ripple.style.height = d + 'px';
+        ripple.style.left = (e.clientX - r.left - d / 2) + 'px';
+        ripple.style.top = (e.clientY - r.top - d / 2) + 'px';
+        el.appendChild(ripple);
+        requestAnimationFrame(function () {
+          ripple.style.transition = 'transform 0.5s ease, opacity 0.6s ease';
+          ripple.style.transform = 'scale(1)';
+          ripple.style.opacity = '0';
+        });
+        setTimeout(function () { ripple.remove(); }, 600);
+      });
+    });
+  </script>
+</body>
+</html>
